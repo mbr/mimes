@@ -13,9 +13,6 @@ class MIMEType(object):
         r'\s*(?P<type>[^\s]+)/(?P<subtype>[^\s;]+)\s*'  # application/foo
     )
 
-    _TSPECIALS = {'(', ')', '<', '>', '@', ',', ';', ':', '\\', '"', '/', '[',
-                  ']', '?', '='}
-
     def __init__(self, type, subtype, parameters=None):
         self.type = type
         self.subtype = subtype
