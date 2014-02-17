@@ -37,7 +37,7 @@ class MIMEType(object):
 
     def _get_lower_params(self):
         return {
-            k.lower(): v for k, v in self.parameters.iteritems()
+            k.lower(): v for k, v in self.parameters.items()
         }
 
     @property
