@@ -2,9 +2,8 @@ mimes
 =====
 
 An internet MIME-message is usually accompanied by a content-type string like
-``text/plain`` or
-``application/collection+json``. The mimes library allows parsing these and
-can if types are subsets of another -- a parser that handles
+``text/plain`` or ``application/collection+json``. The mimes library allows
+parsing these and can if types are subsets of another -- a parser that handles
 ``application/json``, for example, will be perfectly fine handing the
 collection+json type with less semantics.
 
