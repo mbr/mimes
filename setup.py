@@ -11,7 +11,7 @@ def read(fname):
 
 
 setup(
-    name='mimetype',
+    name='mimes',
     version='0.2dev',
     description=('Parses mimetype-strings (RFC 1049, 2045, 2047 and 2231) and '
                  'allows comparing these.'),
