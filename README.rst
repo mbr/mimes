@@ -1,6 +1,9 @@
 mimes
 =====
 
+.. image:: https://travis-ci.org/mbr/mimes.png?branch=master
+   :target: https://travis-ci.org/mbr/mimes
+
 An internet MIME-message is usually accompanied by a content-type string like
 ``text/plain`` or ``application/collection+json``. The mimes library allows
 parsing these and can if types are subsets of another -- a parser that handles
