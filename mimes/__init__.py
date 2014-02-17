@@ -3,9 +3,9 @@ import cgi
 import re
 
 try:
-    from urllib import unquote
+    from urllib import unquote, quote
 except ImportError:
-    from urllib.parse import unquote
+    from urllib.parse import unquote, quote
 
 
 class MIMEType(object):
@@ -17,6 +17,23 @@ class MIMEType(object):
         self.type = type
         self.subtype = subtype
         self.parameters = parameters or OrderedDict()
+
+    @property
+    def _param_string(self):
+        if not self.parameters:
+            return ''
+
+        buf = []
+        for k, v in self.parameters.items():
+            v = str(v)
+            k = str(k).lower()
+            vs = quote(v)
+
+            if vs != v:
+                k += '*'
+
+            buf.append('; {}={}'.format(k, vs))
+        return ''.join(buf)
 
     @property
     def format(self):
@@ -54,3 +71,8 @@ class MIMEType(object):
             parameters[k] = v
 
         return cls(m.group('type'), m.group('subtype'), parameters)
+
+    def __str__(self):
+        return '{self.type}/{self.subtype}{self._param_string}'.format(
+            self=self
+        )
