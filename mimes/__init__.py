@@ -86,7 +86,7 @@ class MIMEType(object):
     def __eq__(self, other):
         return (self.type == other.type and
                 self.subtype == other.subtype and
-                self._get_lower_params() == self._get_lower_params()
+                self._get_lower_params() == other._get_lower_params()
                 )
 
     def __gt__(self, other):

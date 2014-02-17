@@ -35,7 +35,7 @@ def test_equality_honors_parameters():
     assert json != json2
     assert json2 != json
     assert json_ != json2
-    assert json2 != json
+    assert json2 != json_
 
 
 def test_le():
@@ -50,4 +50,4 @@ def test_le():
     assert json2 >= coljson
     assert coljson <= json
 
-    assert json >= json2
+    assert not json >= json2
