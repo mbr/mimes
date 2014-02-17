@@ -20,8 +20,17 @@ class MIMEType(object):
         self.parameters = parameters or OrderedDict()
 
     @property
+    def vendor(self):
+        return self.subtype.lower().startswith('vnd.')
+
+    @property
+    def personal(self):
+        return self.subtype.lower().startswith('prs.')
+
+    @property
     def private(self):
-        return self.subtype.lower().startswith('x-')
+        return (self.subtype.lower().startswith('x-') or
+                self.subtype.lower().startswith('x.'))
 
     @classmethod
     def from_string(cls, s):

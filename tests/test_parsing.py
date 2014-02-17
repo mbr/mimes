@@ -69,7 +69,28 @@ fixtures = {
              'title': 'This is ***fun***',
          }
      },
-    # FIXME: add vnd. types
+    'application/collection+json': {
+        'type': 'application',
+        'subtype': 'collection+json',
+        'private': False,
+        'format': 'json',
+    },
+    'application/vnd.oasis.opendocument.text': {
+        'type': 'application',
+        'subtype': 'vnd.oasis.opendocument.text',
+        'private': False,
+        'vendor': True,
+        'personal': False,
+        'format': None,
+    },
+    'image/prs.something': {
+        'type': 'image',
+        'subtype': 'prs.something',
+        'private': False,
+        'vendor': False,
+        'personal': True,
+        'format': None,
+    },
 }
 
 
