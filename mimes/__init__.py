@@ -1,7 +1,11 @@
 from collections import OrderedDict
 import cgi
 import re
-import urllib
+
+try:
+    from urllib import unquote
+except ImportError:
+    from urllib.parse import unquote
 
 
 class MIMEType(object):
@@ -36,7 +40,7 @@ class MIMEType(object):
         for k, v in params.items():
             if k.endswith('*'):
                 k = k[:-1]
-                v = urllib.unquote(v)
+                v = unquote(v)
             parameters[k] = v
 
         return cls(m.group('type'), m.group('subtype'), parameters)
