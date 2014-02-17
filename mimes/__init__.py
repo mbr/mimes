@@ -35,6 +35,11 @@ class MIMEType(object):
             buf.append('; {}={}'.format(k, vs))
         return ''.join(buf)
 
+    def _get_lower_params(self):
+        return {
+            k.lower(): v for k, v in self.parameters.iteritems()
+        }
+
     @property
     def format(self):
         return self.subtype[self.subtype.rfind('+')+1:] if '+' in self.subtype\
@@ -76,3 +81,17 @@ class MIMEType(object):
         return '{self.type}/{self.subtype}{self._param_string}'.format(
             self=self
         )
+
+    # ordering
+    def __eq__(self, other):
+        return (self.type == other.type and
+                self.subtype == other.subtype and
+                self._get_lower_params() == self._get_lower_params()
+                )
+
+    def __gt__(self, other):
+        return (self.type == other.type and
+                self.subtype == other.format)
+
+    def __ge__(self, other):
+        return self == other or self > other
