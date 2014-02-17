@@ -12,7 +12,7 @@ def read(fname):
 
 setup(
     name='mimes',
-    version='0.2dev',
+    version='0.2.dev1',
     description=('Parses mimetype-strings (RFC 1049, 2045, 2047 and 2231) and '
                  'allows comparing these.'),
     long_description=read('README.rst'),
