@@ -37,7 +37,7 @@ class MIMEType(object):
 
     @property
     def format(self):
-        return self.subtype[self.subtype.rfind('+')] if '+' in self.subtype\
+        return self.subtype[self.subtype.rfind('+')+1:] if '+' in self.subtype\
             else None
 
     @property
