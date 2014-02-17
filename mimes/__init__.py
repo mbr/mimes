@@ -16,8 +16,12 @@ class MIMEType(object):
     def __init__(self, type, subtype, parameters=None):
         self.type = type
         self.subtype = subtype
-        self.format = subtype[subtype.rfind('+')] if '+' in subtype else None
         self.parameters = parameters or OrderedDict()
+
+    @property
+    def format(self):
+        return self.subtype[self.subtype.rfind('+')] if '+' in self.subtype\
+            else None
 
     @property
     def vendor(self):
