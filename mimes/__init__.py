@@ -133,7 +133,7 @@ class MIMESet(set):
                     continue
 
         # rank candidates according to mimestring
-        return sorted(valid, key=str)[0]
+        return sorted(valid, key=str, reverse=True)[0]
 
     @classmethod
     def from_strings(cls, *ss):
