@@ -84,7 +84,7 @@ class MIMEType(object):
 
     def __repr__(self):
         return ('{self.__class__.__name__}({self.type!r}, {self.subtype!r},'
-                ' {self.parameters!r}'.format(self=self))
+                ' {self.parameters!r})'.format(self=self))
 
     # ordering
     def __eq__(self, other):
