@@ -57,9 +57,10 @@ as well. This is expressed using the inequality operators::
   False
 
 A media type is strictly smaller than another media type if and only if both
-types are of the same type (``application``), their subtypes are not equal
-(``json`` vs ``collection+json``) and if the first type's format is exactly the
-subtype of the second type (``json``). Parameters on both types are ignored.
+types are of the same type (``application``), are not equal and either the
+first type's format is exactly the subtype of the second type
+(``collection+json`` vs ``json``) or the first time has the same type and
+subtype as the second without any parameters.
 
 Equality is checked by checking if the types are equal, including parameters.
 Note that parameters are compared case-insensitive on keys, but
