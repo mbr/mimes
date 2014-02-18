@@ -90,8 +90,16 @@ class MIMEType(object):
                 )
 
     def __gt__(self, other):
-        return (self.type == other.type and
-                self.subtype == other.format)
+        if self == other:
+            return False
+
+        if self.type == other.type:
+            if self.subtype == other.subtype and not self.parameters:
+                return True
+            if self.subtype == other.format:
+                return True
+
+        return False
 
     def __ge__(self, other):
         return self == other or self > other

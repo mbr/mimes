@@ -51,3 +51,20 @@ def test_le():
     assert coljson <= json
 
     assert not json >= json2
+
+
+def test_parameter_vs_parameterless():
+    apiv1 = MIMEType('application', 'vnd.api+json', parameters={'v': 1})
+    apiv2 = MIMEType('application', 'vnd.api+json', parameters={'v': 2})
+    apivx = MIMEType('application', 'vnd.api+json')
+    json = MIMEType('application', 'json', parameters={'a': 1})
+
+    assert apiv1 != apiv2
+    assert apiv1 != apivx
+    assert apiv1 != json
+
+    assert not apiv1 < apiv2
+    assert not apiv1 > apiv2
+    assert apiv1 < apivx < json
+    assert apiv2 < apivx < json
+    assert apiv1 < json
