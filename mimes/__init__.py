@@ -107,3 +107,34 @@ class MIMEType(object):
 
     def __ge__(self, other):
         return self == other or self > other
+
+
+class MIMESet(set):
+    def get_most_specific(self, t):
+        candidates = set()
+
+        for c in self:
+            if c == t:
+                return c
+            if t < c:
+                candidates.add(c)
+
+        if not candidates:
+            return None
+
+        # no exact match found, remove all elements that have more specific
+        # children in the candidate set
+        valid = candidates.copy()
+        for cand in candidates:
+            for other in candidates:
+                if cand > other:
+                    # discard candidate
+                    valid.remove(cand)
+                    continue
+
+        # rank candidates according to mimestring
+        return sorted(valid, key=str)[0]
+
+    @classmethod
+    def from_strings(cls, *ss):
+        return cls([MIMEType.from_string(s) for s in ss])
