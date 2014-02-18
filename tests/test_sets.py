@@ -16,22 +16,28 @@ def ms():
 
 def test_parse_incoming(ms):
     # use case: given a list of parsers, find one for the client input
-    assert ms.get_closest_fit(
+    assert ms.find_super(
         MIMEType.from_string('application/collection+json; version=3')
     ) == MIMEType.from_string('application/collection+json')
 
-    assert ms.get_closest_fit(
+    assert ms.find_super(
         MIMEType.from_string('application/collection+json; version=1')
     ) == MIMEType.from_string('application/collection+json; version=1')
 
-    assert ms.get_closest_fit(
+    assert ms.find_super(
         MIMEType.from_string('application/json')
     ) == MIMEType.from_string('application/json')
 
-    assert ms.get_closest_fit(
+    assert ms.find_super(
         MIMEType.from_string('application/api+json')
     ) == MIMEType.from_string('application/json')
 
-    assert ms.get_closest_fit(
+    assert ms.find_super(
         MIMEType.from_string('image/jpeg')
     ) is None
+
+
+def test_render_outgoing(ms):
+    assert ms.find_sub(
+        MIMEType.from_string('application/json')
+    ) == MIMEType.from_string('application/collection+json; version=2')

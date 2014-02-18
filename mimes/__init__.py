@@ -133,14 +133,17 @@ class MIMEGraph(object):
             if n > t:
                 g.add_edge(n, t)
 
-    def get_closest_fit(self, target):
-        """Searches all roots for compatible nodes, returns those with the
+    def get_most_specialized(self, target, predicate):
+        """Searches all roots for less-or-equal nodes, returns those with the
         longest path upwards.
 
         If multiple are valid, returns the first element when ordered by
         mimestring in reverse."""
         roots = [n for n, deg in self.graph.in_degree_iter()
-                 if deg == 0 and target <= n]
+                 if deg == 0 and predicate(target, n)]
+
+        if not roots:
+            return None
 
         # traverse root
         levels = {}
@@ -149,14 +152,17 @@ class MIMEGraph(object):
 
             while q:
                 level, cur = q.pop()
+                q.extend((level + 1, n)
+                         for n in self.graph.neighbors_iter(cur))
 
-                if target <= cur:
+                if predicate(target, cur):
                     levels.setdefault(level, set()).add(cur)
-                    q.extend((level + 1, n)
-                             for n in self.graph.neighbors_iter(cur))
-
-        if not levels:
-            return None
 
         candidates = levels[max(levels.keys())]
         return sorted(candidates, key=str, reverse=True)[0]
+
+    def find_super(self, target):
+        return self.get_most_specialized(target, predicate=lambda t, n: t <= n)
+
+    def find_sub(self, target):
+        return self.get_most_specialized(target, predicate=lambda t, n: t >= n)
