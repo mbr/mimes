@@ -7,6 +7,8 @@ try:
 except ImportError:
     from urllib.parse import unquote, quote
 
+import networkx as nx
+
 
 class MIMEType(object):
     _TYPE_RE = re.compile(
@@ -109,32 +111,52 @@ class MIMEType(object):
         return self == other or self > other
 
 
-class MIMESet(set):
-    def get_most_specific_parent(self, t):
-        candidates = set()
+class MIMEGraph(object):
+    def __init__(self, types):
+        self.graph = nx.DiGraph()
 
-        for c in self:
-            if c == t:
-                return c
-            if t < c:
-                candidates.add(c)
-
-        if not candidates:
-            return None
-
-        # no exact match found, remove all elements that have more specific
-        # children in the candidate set
-        valid = candidates.copy()
-        for cand in candidates:
-            for other in candidates:
-                if cand > other:
-                    # discard candidate
-                    valid.remove(cand)
-                    continue
-
-        # rank candidates according to mimestring
-        return sorted(valid, key=str, reverse=True)[0]
+        for t in types:
+            self.add_type(t)
 
     @classmethod
     def from_strings(cls, *ss):
-        return cls([MIMEType.from_string(s) for s in ss])
+        return cls(MIMEType.from_string(s) for s in ss)
+
+    def add_type(self, t):
+        g = self.graph
+
+        g.add_node(t)
+
+        for n in g.nodes():
+            if n < t:
+                g.add_edge(t, n)
+            if n > t:
+                g.add_edge(n, t)
+
+    def get_closest_fit(self, target):
+        """Searches all roots for compatible nodes, returns those with the
+        longest path upwards.
+
+        If multiple are valid, returns the first element when ordered by
+        mimestring in reverse."""
+        roots = [n for n, deg in self.graph.in_degree_iter()
+                 if deg == 0 and target <= n]
+
+        # traverse root
+        levels = {}
+        for root in roots:
+            q = [(0, root)]
+
+            while q:
+                level, cur = q.pop()
+
+                if target <= cur:
+                    levels.setdefault(level, set()).add(cur)
+                    q.extend((level + 1, n)
+                             for n in self.graph.neighbors_iter(cur))
+
+        if not levels:
+            return None
+
+        candidates = levels[max(levels.keys())]
+        return sorted(candidates, key=str, reverse=True)[0]
