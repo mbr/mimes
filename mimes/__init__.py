@@ -110,6 +110,11 @@ class MIMEType(object):
     def __ge__(self, other):
         return self == other or self > other
 
+    def __hash__(self):
+        # FIXME: hash() should be a homomorphism on ==
+        # (see the manual on __hash__)
+        return id(self)
+
 
 class MIMEGraph(object):
     def __init__(self, types):
