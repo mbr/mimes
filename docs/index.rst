@@ -74,3 +74,31 @@ case-sensivitive on values::
   >>> mta == mtc
   False
 
+
+Finding suitable types through a MIMEGraph
+------------------------------------------
+
+mimes supports more complex searches for compatible internet media types. The
+:class:`mimes.MIMEGraph` allows storing a list of types in a collection and
+finding compatible types common. Two scenarios are common: Finding a supertype
+or finding a subtype, both as specific as possible.
+
+An example for the first scenario is a client sending an HTTP-request with a
+body; the server accepts various media types, but not the one the client sent.
+It is likely though that one of the types the server can handle is a supertype
+of the type sent by the client. Example::
+
+  >>> from mimes import MIMEGraph, MIMEType
+  >>> g = MIMEGraph([MIMEType('application', 'json'), MIMEType('application', 'xml'), MIMEType('text', 'plain')])
+  >>> g.find_super(MIMEType.from_string('application/collection+json'))
+  MIMEType('application', 'json', OrderedDict())
+  >>> g.find_super(MIMEType.from_string('application/xml'))
+  MIMEType('application', 'xml', OrderedDict())
+
+When sending a reply, the server could inspect the clients accept type headers
+and determine to send it the most specific type the client can understand:
+
+  >>> from mimes import MIMEGraph, MIMEType
+  >>> a = MIMEGraph([MIMEType.from_string('application/json'), MIMEType.from_string('application/problem+json')])
+  >>> a.find_sub(MIMEType.from_string('application/json'))
+  MIMEType('application', 'problem+json', OrderedDict())
