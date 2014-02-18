@@ -110,7 +110,7 @@ class MIMEType(object):
 
 
 class MIMESet(set):
-    def get_most_specific(self, t):
+    def get_most_specific_parent(self, t):
         candidates = set()
 
         for c in self:
